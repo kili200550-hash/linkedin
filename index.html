@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mockup LinkedIn Interactivo</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eff2fb;
+    color: #16213d;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    gap: 24px;
+    padding: 30px;
+  }
+
+  .panel, .profile {
+    background: white;
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  h2 {
+    margin-top: 0;
+    color: #16213d;
+  }
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 14px;
+  }
+
+  input, textarea {
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px;
+    border: 1px solid #d7dcef;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  textarea {
+    height: 80px;
+    resize: none;
+  }
+
+  .banner {
+    height: 130px;
+    background: linear-gradient(135deg, #16213d, #a596ff);
+    border-radius: 18px;
+  }
+
+  .avatar {
+    width: 105px;
+    height: 105px;
+    background: #eb96ff;
+    border-radius: 50%;
+    border: 5px solid white;
+    margin-top: -50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+  }
+
+  .name {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .headline {
+    font-size: 17px;
+    color: #4b587c;
+    margin-top: 5px;
+  }
+
+  .section {
+    margin-top: 24px;
+    padding: 18px;
+    background: #f7f8ff;
+    border-radius: 16px;
+  }
+
+  .progress-box {
+    margin-top: 20px;
+  }
+
+  .bar {
+    height: 14px;
+    background: #e0e4f5;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #a596ff, #eb96ff);
+    transition: width 0.4s;
+  }
+
+  .score {
+    font-weight: bold;
+    margin-top: 8px;
+  }
+
+  .tip {
+    margin-top: 16px;
+    padding: 14px;
+    border-left: 5px solid #a596ff;
+    background: #f3f1ff;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="panel">
+    <h2>Construye tu perfil</h2>
+
+    <label>Nombre</label>
+    <input id="inputName" placeholder="Ej: Laura Gómez">
+
+    <label>Titular profesional</label>
+    <input id="inputHeadline" placeholder="Ej: Psicóloga interesada en gestión del talento">
+
+    <label>Acerca de</label>
+    <textarea id="inputAbout" placeholder="Escribe una breve descripción de tu valor profesional"></textarea>
+
+    <label>Competencias clave</label>
+    <input id="inputSkills" placeholder="Ej: comunicación, análisis, liderazgo">
+
+    <label>Objetivo profesional</label>
+    <textarea id="inputGoal" placeholder="¿Qué tipo de oportunidad estás buscando?"></textarea>
+
+    <div class="progress-box">
+      <h3>Nivel de perfil</h3>
+      <div class="bar">
+        <div class="fill" id="progressFill"></div>
+      </div>
+      <div class="score" id="scoreText">0% completado</div>
+    </div>
+
+    <div class="tip" id="tipBox">
+      Completa los campos para fortalecer tu perfil profesional.
+    </div>
+  </div>
+
+  <div class="profile">
+    <div class="banner"></div>
+    <div class="avatar">👤</div>
+
+    <div class="name" id="previewName">Tu nombre</div>
+    <div class="headline" id="previewHeadline">Tu titular profesional aparecerá aquí</div>
+
+    <div class="section">
+      <h2>Acerca de</h2>
+      <p id="previewAbout">Aquí aparecerá tu descripción profesional.</p>
+    </div>
+
+    <div class="section">
+      <h2>Competencias</h2>
+      <p id="previewSkills">Tus competencias aparecerán aquí.</p>
+    </div>
+
+    <div class="section">
+      <h2>Objetivo profesional</h2>
+      <p id="previewGoal">Tu objetivo profesional aparecerá aquí.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const fields = [
+    "inputName",
+    "inputHeadline",
+    "inputAbout",
+    "inputSkills",
+    "inputGoal"
+  ];
+
+  fields.forEach(id => {
+    document.getElementById(id).addEventListener("input", updateProfile);
+  });
+
+  function updateProfile() {
+    const name = document.getElementById("inputName").value;
+    const headline = document.getElementById("inputHeadline").value;
+    const about = document.getElementById("inputAbout").value;
+    const skills = document.getElementById("inputSkills").value;
+    const goal = document.getElementById("inputGoal").value;
+
+    document.getElementById("previewName").textContent = name || "Tu nombre";
+    document.getElementById("previewHeadline").textContent = headline || "Tu titular profesional aparecerá aquí";
+    document.getElementById("previewAbout").textContent = about || "Aquí aparecerá tu descripción profesional.";
+    document.getElementById("previewSkills").textContent = skills || "Tus competencias aparecerán aquí.";
+    document.getElementById("previewGoal").textContent = goal || "Tu objetivo profesional aparecerá aquí.";
+
+    let completed = 0;
+    fields.forEach(id => {
+      if (document.getElementById(id).value.trim() !== "") completed++;
+    });
+
+    const percent = Math.round((completed / fields.length) * 100);
+    document.getElementById("progressFill").style.width = percent + "%";
+    document.getElementById("scoreText").textContent = percent + "% completado";
+
+    const tip = document.getElementById("tipBox");
+
+    if (percent === 100) {
+      tip.textContent = "¡Excelente! Tu perfil comunica mejor tu valor profesional.";
+    } else if (percent >= 60) {
+      tip.textContent = "Vas muy bien. Revisa que tu titular y tu objetivo sean claros y estratégicos.";
+    } else if (percent >= 30) {
+      tip.textContent = "Tu perfil empieza a tomar forma. Agrega más información sobre tus competencias.";
+    } else {
+      tip.textContent = "Completa los campos para fortalecer tu perfil profesional.";
+    }
+  }
+</script>
+
+</body>
+</html>
